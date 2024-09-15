@@ -1,0 +1,24 @@
+{% extends "forum/base.html" %}
+
+{% block title %}
+ユーザー一覧
+{% endblock %}
+
+{% block main %}
+<h1>ユーザー一覧(全{{ users|length }}人)</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>ユーザー</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td><a href="{% url 'user' user.id %}">{{ user.username }}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    
+</table>
+{% endblock %}

@@ -1,5 +1,5 @@
-from django.http import HttpResponse, Http404
-from django.shortcuts import redirect
+from django.http import Http404
+from django.shortcuts import redirect, render
 
 class User:
     def __init__(self, id, username, email, age):
@@ -31,52 +31,42 @@ comments = [
 ]
 
 def index_view(request):
-    return redirect('comments')
+    return redirect(to='comments')
 
 def users_view(request):
-    body = ''
-    
-    for user in users:
-        body += '<a href="/forum/user/{id}/">{name}</a>'.format(id=user.id,name=user.username)
-        body += '\n<br>'
+    context = {
+        'users' : users
+    }
 
-    return HttpResponse(body)
+    return render(request, 'forum/users.html', context)
 
 def user_view(request, user_id):
     if user_id > len(users) or user_id < 1:
         raise Http404('Not found user')
 
-    body = ''
     user = users[user_id - 1]
 
-    body += user.username
-    body += ','
-    body += user.email
-    body += ','
-    body += str(user.age)
-    body += '\n<br>'
+    context = {
+        'user' : user
+    }
 
-    return HttpResponse(body)
+    return render(request, 'forum/user.html', context)
 
 def comments_view(request):
-    body = ''
-    
-    for comment in comments:
-        body += '<a href="/forum/comment/{id}/">{text}</a>'.format(id=comment.id,text=comment.text)
-        body += '\n<br>'
+    context = {
+        'comments' : comments
+    }
 
-    return HttpResponse(body)
+    return render(request, 'forum/comments.html', context)
 
 def comment_view(request, comment_id):
-    if comment_id > len(comments) or comment_id < 1:
+    if comment_id > len(comments) and comment_id < 1:
         raise Http404('Not found comment')
 
-    body = ''
     comment = comments[comment_id - 1]
 
-    body += comment.text
-    body += ','
-    body += '{0:%Y年%m月%d日}'.format(comment.date)
-    body += '\n<br>'
+    context = {
+        'comment' : comment
+    }
 
-    return HttpResponse(body)
+    return render(request, 'forum/comment.html', context)

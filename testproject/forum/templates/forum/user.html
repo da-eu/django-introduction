@@ -1,0 +1,17 @@
+{% extends "forum/base.html" %}
+
+{% block title %}
+{{ user.username }}
+{% endblock %}
+
+{% block main %}
+<h1>ユーザー({{ user.id }})</h1>
+<h2>{{ user.username }}の情報</h2>
+<table class="table table-hover">
+    <tbody>
+        <tr><th>名前</th><td>{{ user.username }}</td></tr>
+        <tr><th>連絡先</th><td>{{ user.email|urlize }}</td></tr>
+        <tr><th>年齢</th><td>{{ user.age }}</td></tr>
+    </tbody>
+</table>
+{% endblock %}
