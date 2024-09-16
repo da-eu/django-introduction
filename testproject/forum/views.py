@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.shortcuts import redirect, render
+from .forms import RegisterForm, PostForm
 
 class User:
     def __init__(self, id, username, email, age):
@@ -70,3 +71,50 @@ def comment_view(request, comment_id):
     }
 
     return render(request, 'forum/comment.html', context)
+
+def register_view(request):
+
+    if request.method == 'POST':
+
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            id = len(users) + 1
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            age = form.cleaned_data.get('age')
+            
+            user = User(id=id, username=username, email=email, age=age)
+            users.append(user)
+
+            return redirect('users')
+
+    else:
+        form = RegisterForm()
+    
+    context = {
+        'form': form
+    }
+
+    return render(request, 'forum/register.html', context)
+
+def post_view(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            id = len(comments) + 1
+            text = form.cleaned_data.get('text')
+            date = datetime.datetime.now()   
+
+            comment = Comment(id, text, date)
+            comments.append(comment)
+
+            return redirect('comments')
+    else:
+        form = PostForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'forum/post.html', context)
