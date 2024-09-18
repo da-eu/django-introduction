@@ -7,6 +7,11 @@
 {% block main %}
 <h1>コメント({{ comment.id }})</h1>
 <table class="table table-hover">
+{% if comment.user is not None %}
+<tr><td>投稿者</td><td><a href="{% url 'user' comment.user.id %}">{{ comment.user.username }}</a></td></tr>
+{% else %}
+<tr><td>投稿者</td><td>不明</td></tr>
+{% endif %}
 <tr><td>本文</td><td>{{ comment.text }}</td></tr>
 <tr><td>投稿日</td><td>{{ comment.date|date }}</td></tr>
 </table>

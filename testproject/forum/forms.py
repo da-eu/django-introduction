@@ -1,4 +1,5 @@
 from django import forms
+from .models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -14,4 +15,5 @@ class RegisterForm(forms.Form):
     age = forms.IntegerField(min_value=0, max_value=200)
 
 class PostForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=User.objects.all())
     text = forms.CharField()

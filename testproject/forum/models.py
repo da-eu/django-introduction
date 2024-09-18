@@ -7,8 +7,9 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
-    
+
 class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='comments')
     text = models.CharField(max_length=256)
     date = models.DateTimeField(auto_now_add=True)
 

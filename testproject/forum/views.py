@@ -73,8 +73,10 @@ def post_view(request):
 
         if form.is_valid():
             text = form.cleaned_data.get('text')
+            user = form.cleaned_data.get('user')
 
             comment = Comment(text=text)
+            comment.user = user
             comment.save()
 
             return redirect('comments')
