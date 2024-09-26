@@ -1,10 +1,14 @@
 from django import forms
-from .models import User, Comment
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
+from .models import Comment
 
-class RegisterForm(forms.ModelForm):
+User = get_user_model()
+
+class RegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'age']
+        fields = [User.USERNAME_FIELD] + User.REQUIRED_FIELDS
 
 class PostForm(forms.ModelForm):
     class Meta:
