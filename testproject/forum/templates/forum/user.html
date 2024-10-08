@@ -18,11 +18,26 @@
 <h2>{{ user.username }}のコメント履歴</h2>
 <table class="table table-hover">
     <tbody>
-        {% for comment in user.comments.all %}
+        {% for comment in page_obj %}
         <tr>
             <td><a href="{% url 'comment' comment.id %}">{{ comment.text|truncatechars:20 }}</a></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?p=1">« first</a>
+            <a href="?p={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+            <a href="?p={{ page_obj.next_page_number }}">next</a>
+            <a href="?p={{ page_obj.paginator.num_pages }}">last »</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

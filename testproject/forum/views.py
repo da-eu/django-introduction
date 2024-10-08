@@ -3,6 +3,7 @@ from .forms import RegisterForm, PostForm, LoginForm
 from .models import Comment
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 User = get_user_model()
 
@@ -12,10 +13,14 @@ def index_view(request):
 
 @login_required
 def users_view(request):
-    users = User.objects.all()
+    users = User.objects.all().order_by('date_joined')
+
+    paginator = Paginator(users, 3)
+    number = int(request.GET.get('p', 1))
+    page_obj = paginator.page(number)
 
     context = {
-        'users' : users
+        'page_obj' : page_obj
     }
 
     return render(request, 'forum/users.html', context)
@@ -23,19 +28,29 @@ def users_view(request):
 @login_required
 def user_view(request, user_id):
     user = get_object_or_404(User, id=user_id)
+    comments = Comment.objects.filter(user=user).order_by('date')
+
+    paginator = Paginator(comments, 3)
+    number = int(request.GET.get('p', 1))
+    page_obj = paginator.page(number)
 
     context = {
-        'user' : user
+        'user' : user,
+        'page_obj' : page_obj
     }
 
     return render(request, 'forum/user.html', context)
 
 @login_required
 def comments_view(request):
-    comments = Comment.objects.all()
+    comments = Comment.objects.all().order_by('date')
+
+    paginator = Paginator(comments, 3)
+    number = int(request.GET.get('p', 1))
+    page_obj = paginator.page(number)
 
     context = {
-        'comments' : comments
+        'page_obj' : page_obj
     }
 
     return render(request, 'forum/comments.html', context)

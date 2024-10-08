@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<h1>コメント一覧(全{{ comments|length }}件)</h1>
+<h1>コメント一覧(全{{ page_obj.paginator.count }}件)</h1>
 <table class="table table-hover">
     <thead>
         <tr>
@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for comment in comments %}
+        {% for comment in page_obj %}
         <tr>
             <td><a href="{% url 'comment' comment.id %}">{{ comment.text|truncatechars:20 }}</a></td>
             {% if comment.user is not None %}
@@ -25,4 +25,19 @@
         {% endfor %}
     </tbody>
 </table>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?p=1">« first</a>
+            <a href="?p={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+            <a href="?p={{ page_obj.next_page_number }}">next</a>
+            <a href="?p={{ page_obj.paginator.num_pages }}">last »</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<h1>ユーザー一覧(全{{ users|length }}人)</h1>
+<h1>ユーザー一覧(全{{ page_obj.paginator.count }}人)</h1>
 <table class="table table-hover">
    
     <thead>
@@ -14,7 +14,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for user in users %}
+        {% for user in page_obj %}
         <tr>
             <td><a href="{% url 'user' user.id %}">{{ user.username }}</a></td>
             <td>{{ user.comments.all|length }}</td>
@@ -23,4 +23,19 @@
     </tbody>
     
 </table>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?p=1">« first</a>
+            <a href="?p={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+            <a href="?p={{ page_obj.next_page_number }}">next</a>
+            <a href="?p={{ page_obj.paginator.num_pages }}">last »</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
