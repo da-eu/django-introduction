@@ -13,7 +13,7 @@ def index_view(request):
 
 @login_required
 def users_view(request):
-    users = User.objects.all().order_by('date_joined')
+    users = User.objects.prefetch_related('comments').order_by('date_joined')
 
     paginator = Paginator(users, 3)
     number = int(request.GET.get('p', 1))
@@ -43,7 +43,7 @@ def user_view(request, user_id):
 
 @login_required
 def comments_view(request):
-    comments = Comment.objects.all().order_by('date')
+    comments = Comment.objects.select_related('user').order_by('date')
 
     paginator = Paginator(comments, 3)
     number = int(request.GET.get('p', 1))
