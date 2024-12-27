@@ -14,5 +14,9 @@
 {% endif %}
 <tr><td>本文</td><td>{{ comment.text }}</td></tr>
 <tr><td>投稿日</td><td>{{ comment.date|date }}</td></tr>
+<tr>
+    <td class="text-center"><a href="{% url 'update' comment.id %}">編集</a></td>
+    <td class="text-center"><a href="{% url 'delete' comment.id %}">削除</a></td>
+</tr>
 </table>
 {% endblock %}

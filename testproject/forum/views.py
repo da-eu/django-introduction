@@ -1,9 +1,10 @@
 from .forms import RegisterForm, PostForm, LoginForm
 from .models import Comment
+from .mixins import AuthorRequiredMixin
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
-from django.views.generic import ListView, DetailView, RedirectView, CreateView
+from django.views.generic import ListView, DetailView, RedirectView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
@@ -80,3 +81,16 @@ class Post(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+    
+class CommentUpdate(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+    model = Comment
+    form_class = PostForm
+    pk_url_kwarg = 'comment_id'
+    template_name = 'forum/update.html'
+    success_url = reverse_lazy('comments')
+
+class CommentDelete(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
+    model = Comment
+    pk_url_kwarg = 'comment_id'
+    template_name = 'forum/delete.html'
+    success_url = reverse_lazy('comments')
