@@ -4,7 +4,7 @@ from rest_framework import permissions
 from rest_framework.authtoken.views import obtain_auth_token
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from .views import CommentViewSet
+from .views import CommentViewSet, LoginAPI, LogoutAPI
 
 router = routers.DefaultRouter()
 router.register(r'comments', CommentViewSet, basename='comment')
@@ -26,5 +26,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('', include(router.urls)),
     path('swagger/', schema_view.with_ui('swagger'), name='schema-swagger-ui'),
-    path('token/', obtain_auth_token)
+    path('token/', obtain_auth_token),
+    path('login/', LoginAPI.as_view()),
+    path('logout/', LogoutAPI.as_view()),
 ]

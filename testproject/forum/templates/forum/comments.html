@@ -1,11 +1,12 @@
 {% extends "forum/base.html" %}
+{% load static %}
 
 {% block title %}
 コメント一覧
 {% endblock %}
 
 {% block main %}
-<h1>コメント一覧(全{{ page_obj.paginator.count }}件)</h1>
+<h1>コメント一覧(全<span id="comment-count">{{ page_obj.paginator.count }}</span>件)</h1>
 <table class="table table-hover">
     <thead>
         <tr>
@@ -40,4 +41,8 @@
         {% endif %}
     </span>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'forum/js/comment_count.js' %}"></script>
 {% endblock %}

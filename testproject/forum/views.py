@@ -62,16 +62,7 @@ class Register(CreateView):
     model = User
     form_class = RegisterForm
     template_name = 'forum/register.html'
-
-    def form_valid(self, form):
-        
-        response = super().form_valid(form)
-        user = self.object
-        login(self.request, user)
-        return response
-    
-    def get_success_url(self):
-        return reverse('user', kwargs={'user_id':self.object.pk})
+    success_url = reverse_lazy('login')
 
 class Post(LoginRequiredMixin, CreateView):
     form_class = PostForm
